@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 // import Home from '../screens/Home';
@@ -6,7 +7,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 // import Comments from '../screens/Comments';
 import MainStack from './MainStack';
 import TopTabNav from './TopTabNav';
-import Ionicons from 'react-native-vector-icons/';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -14,37 +15,15 @@ const MainTab = () => {
   return (
     <BottomTab.Navigator
       screenOptions={({route}) => {
-        // return {
-        //   tabBarIcon: ({focused, color, size}) => {
-        //     let iconName;
-        //     if (route.name === 'MainStack') {
-        //       iconName = focused ? 'planet' : 'home';
-        //     } else if (route.name === 'Comments') {
-        //       iconName = focused ? 'chatbubbles' : 'quote';
-        //     }
-        //     return <Ionicons name={iconName} color={color} size={size} />;
-        //   },
-        // };
-        // return {
-        //   tabBarIcon: ({color, size}) => {
-        //     let iconName;
-        //     if (route.name === 'MainStack') {
-        //       iconName = 'home';
-        //     } else if (route.name === 'Comments') {
-        //       iconName = 'chatbubbles';
-        //     }
-        //     return <Ionicons name={iconName} color={color} size={size} />;
-        //   },
-        // };
         return {
-          tabBarIcon: () => {
+          tabBarIcon: ({focused, color, size}) => {
             let iconName;
             if (route.name === 'MainStack') {
-              iconName = 'home';
+              iconName = focused ? 'planet' : 'home';
             } else if (route.name === 'Comments') {
-              iconName = 'chatbubbles';
+              iconName = focused ? 'chatbubble' : 'chatbox';
             }
-            return <Ionicons name={iconName} />;
+            return <Ionicons name={iconName} color={color} size={size} />;
           },
         };
       }}
