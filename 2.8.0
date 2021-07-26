@@ -1,0 +1,9 @@
++ typescript@4.3.5
++ @babel/preset-env@7.1.6
+added 17 packages from 4 contributors and audited 1023 packages in 15.21s
+
+74 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
