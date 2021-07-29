@@ -41,7 +41,7 @@ const MainTab = () => {
       <BottomTab.Screen
         component={MainStack}
         name="MainStack"
-        options={{title: 'Home'}}
+        options={{title: 'Timeline'}}
       />
       <BottomTab.Screen component={TopTabNav} name="Comments" />
     </BottomTab.Navigator>

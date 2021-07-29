@@ -10,8 +10,15 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   StyleSheet,
+  ToastAndroid,
+  Alert,
+  Platform,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
+import Axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const API_URL = 'http://10.0.2.2:2000';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -55,10 +62,43 @@ const Register = () => {
   };
 
   const registerBtnHandler = () => {
-    dispatch({
-      type: 'LOGIN_BTN_HANDLER',
-      payload: registerForm.username,
-    });
+    Axios.get(`${API_URL}/users`, {
+      params: {
+        username: registerForm.username,
+      },
+    })
+      .then(res => {
+        if (!res.data.length) {
+          Axios.post(`${API_URL}/users`, {
+            username: registerForm.username,
+            password: registerForm.password,
+          })
+            .then(() => {
+              AsyncStorage.setItem('username', registerForm.username)
+                .then(() => {
+                  dispatch({
+                    type: 'CHANGE_USER_NAME',
+                    payload: registerForm.username,
+                  });
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          if (Platform.OS === 'android') {
+            ToastAndroid.show('Username has been used', ToastAndroid.SHORT);
+          } else {
+            Alert.alert('Username has been used');
+          }
+          // ToastAndroid.show('Username has been used', ToastAndroid.SHORT);
+          // Alert.alert('Username has been used');
+        }
+      })
+      .catch();
   };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

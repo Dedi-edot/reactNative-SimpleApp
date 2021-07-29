@@ -12,7 +12,7 @@ import {
   Keyboard,
   StyleSheet,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
 
 const Login = props => {
   const dispatch = useDispatch();
-  const globalAuth = useSelector(state => state.auth);
   const [loginForm, setLoginForm] = useState({
     username: '',
     password: '',
@@ -71,7 +70,6 @@ const Login = props => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{...styles.mainContainer}}>
-        <Text>User Name: {globalAuth.username}</Text>
         <View>
           <Text>Username</Text>
           <TextInput
