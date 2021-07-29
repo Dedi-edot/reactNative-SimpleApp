@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 /* eslint-disable prettier/prettier */
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -13,7 +13,7 @@ import {
   TextInput,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useDispatch} from 'react-redux';
+
 import Axios from 'axios';
 
 const API_URL = 'http://10.0.2.2:2000';
@@ -30,13 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
   },
-  btnLogout: {
-    backgroundColor: 'pink',
-    borderRadius: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    marginVertical: 16,
-  },
+
   btnSend: {
     backgroundColor: 'pink',
     borderRadius: 5,
@@ -71,7 +65,6 @@ const styles = StyleSheet.create({
 });
 
 const Home = props => {
-  const dispatch = useDispatch();
   const [userList, setUserList] = useState([]);
   const [isRefreshing, setIsrefreshing] = useState(false);
   const [userInput, setUserInput] = useState('');
@@ -133,27 +126,11 @@ const Home = props => {
     fetchData();
   }, []);
 
-  const logoutBtnHandler = () => {
-    AsyncStorage.removeItem('username')
-      .then(() => {
-        dispatch({
-          type: 'RESET_USERNAME',
-        });
-      })
-      .catch(() => {
-        console.log('error');
-      });
-  };
-
   return (
     <View style={{...styles.mainContainer}}>
-      <TouchableOpacity
-        style={{...styles.btnLogout}}
-        onPress={logoutBtnHandler}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
       <View style={{...styles.inputView}}>
         <TextInput
+          placeholder="Input here"
           onChangeText={inputHandler}
           style={{...styles.input}}
           value={userInput}
