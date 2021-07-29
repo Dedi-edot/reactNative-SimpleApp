@@ -11,8 +11,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   StyleSheet,
+  ToastAndroid,
+  Alert,
+  Platform,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
+import Axios from 'axios';
+
+const API_URL = 'http://10.0.2.2:2000';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -56,16 +62,39 @@ const Login = props => {
   };
 
   const loginBtnHandler = () => {
-    AsyncStorage.setItem('username', loginForm.username)
-      .then(() => {
-        dispatch({
-          type: 'LOGIN_BTN_HANDLER',
-          payload: loginForm.username,
-        });
+    Axios.get(`${API_URL}/users`, {
+      params: {
+        username: loginForm.username,
+        password: loginForm.password,
+      },
+    })
+      .then(res => {
+        if (res.data.length) {
+          AsyncStorage.setItem('username', loginForm.username)
+            .then(() => {
+              dispatch({
+                type: 'LOGIN_BTN_HANDLER',
+                payload: res.data[0].username,
+              });
+            })
+            .catch(() => {
+              console.log('error');
+            });
+        } else {
+          if (Platform.OS === 'android') {
+            ToastAndroid.show(
+              'Username or Password Invalid',
+              ToastAndroid.SHORT,
+            );
+          } else {
+            Alert.alert('Username or Password Invalid');
+          }
+        }
       })
-      .catch(() => {
-        console.log('error');
+      .catch(err => {
+        console.log(err);
       });
+    //
   };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
