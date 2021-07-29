@@ -27,7 +27,15 @@ const MainTab = () => {
           },
         };
       }}
-      tabBarOptions={{activeTintColor: 'blue'}}>
+      tabBarOptions={{
+        activeTintColor: 'blue',
+        style: {
+          borderRadius: 16,
+          position: 'absolute',
+          bottom: 16,
+          marginHorizontal: 16,
+        },
+      }}>
       {/* <BottomTab.Screen component={Home} name="Home" />
       <BottomTab.Screen component={UserProfile} name="UserProfile" /> */}
       <BottomTab.Screen

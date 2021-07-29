@@ -1,9 +1,11 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useSelector, useDispatch} from 'react-redux';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -44,6 +46,15 @@ const users = [
 ];
 
 const Home = props => {
+  const dispatch = useDispatch();
+  // const globalState = useSelector(state => {
+  //   return {
+  //     auth: state.auth,
+  //     todo: state.todo,
+  //   };
+  // });
+  const globalAuth = useSelector(state => state.auth);
+  const globalTodo = useSelector(state => state.todo);
   const renderUsersList = ({item}) => {
     return (
       <View style={{...styles.renderList}}>
@@ -56,15 +67,26 @@ const Home = props => {
       </View>
     );
   };
+
+  const logoutBtnHandler = () => {
+    AsyncStorage.removeItem('username')
+      .then(() => {
+        dispatch({
+          type: 'RESET_USERNAME',
+        });
+      })
+      .catch(() => {
+        console.log('error');
+      });
+  };
+
   return (
     <View style={{...styles.mainContainer}}>
       <Text>Home Screens</Text>
-      <TouchableOpacity
-        style={{...styles.btn}}
-        onPress={() =>
-          props.navigation.push('UserProfile', {username: 'Selamat Datang'})
-        }>
-        <Text>Tap To Navigate</Text>
+      <Text>User Name: {globalAuth.username}</Text>
+      <Text>Todo Count: {globalTodo.todoCount}</Text>
+      <TouchableOpacity style={{...styles.btn}} onPress={logoutBtnHandler}>
+        <Text>Logout</Text>
       </TouchableOpacity>
       <FlatList
         data={users}
