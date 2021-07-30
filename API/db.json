@@ -9,6 +9,25 @@
       "username": "acih",
       "password": "password",
       "id": 2
+    },
+    {
+      "username": "azmi",
+      "password": "azmi",
+      "id": 3
+    },
+    {
+      "username": "Hello",
+      "id": 4
+    },
+    {
+      "username": "mae",
+      "password": "mae",
+      "id": 5
+    },
+    {
+      "username": "dedi",
+      "password": "dedi",
+      "id": 6
     }
   ]
 }

@@ -72,10 +72,24 @@ const Login = props => {
         if (res.data.length) {
           AsyncStorage.setItem('username', loginForm.username)
             .then(() => {
-              dispatch({
-                type: 'LOGIN_BTN_HANDLER',
-                payload: res.data[0].username,
-              });
+              AsyncStorage.setItem(
+                'interceptorsId',
+                Axios.interceptors.request
+                  .use(requestHeader => {
+                    requestHeader.headers['LOG-IN-USER'] = res.data[0].username;
+                    return requestHeader;
+                  })
+                  .toString(),
+              )
+                .then(() => {
+                  dispatch({
+                    type: 'LOGIN_BTN_HANDLER',
+                    payload: res.data[0].username,
+                  });
+                })
+                .catch(() => {
+                  console.log('AsyncStorage Interceptors Error');
+                });
             })
             .catch(() => {
               console.log('error');

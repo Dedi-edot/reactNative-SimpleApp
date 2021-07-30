@@ -8,6 +8,7 @@ import Register from '../screens/Auth/Register';
 import {useSelector, useDispatch} from 'react-redux';
 import MainTab from './MainTab';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from 'axios';
 
 const Stack = createStackNavigator();
 
@@ -18,10 +19,22 @@ const AppNavigator = () => {
   const checkAuth = () => {
     AsyncStorage.getItem('username')
       .then(value => {
-        dispatch({
-          type: 'CHANGE_USER_NAME',
-          payload: value,
-        });
+        AsyncStorage.setItem(
+          'interceptorsId',
+          Axios.interceptors.request
+            .use(requestHeader => {
+              requestHeader.headers['LOG-IN-USER'] = value;
+              return requestHeader;
+            })
+            .toString(),
+        )
+          .then(() => {
+            dispatch({
+              type: 'CHANGE_USER_NAME',
+              payload: value,
+            });
+          })
+          .catch(() => console.log('error'));
       })
       .catch(() => {
         console.log('Error');

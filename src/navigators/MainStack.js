@@ -6,6 +6,7 @@ import UserProfile from '../screens/UserProfile';
 import {useSelector, useDispatch} from 'react-redux';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from 'axios';
 
 const styles = StyleSheet.create({
   btnLogout: {
@@ -27,9 +28,23 @@ const MainStack = () => {
   const logoutBtnHandler = () => {
     AsyncStorage.removeItem('username')
       .then(() => {
-        dispatch({
-          type: 'RESET_USERNAME',
-        });
+        AsyncStorage.getItem('interceptorsId')
+          .then(interceptorsId => {
+            // eslint-disable-next-line radix
+            Axios.interceptors.request.eject(parseInt(interceptorsId));
+            AsyncStorage.removeItem('interceptorsId')
+              .then(() => {
+                dispatch({
+                  type: 'RESET_USERNAME',
+                });
+              })
+              .catch(() => {
+                console.log('error');
+              });
+          })
+          .catch(() => {
+            console.log('error');
+          });
       })
       .catch(() => {
         console.log('error');

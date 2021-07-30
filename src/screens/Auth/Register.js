@@ -76,10 +76,25 @@ const Register = () => {
             .then(() => {
               AsyncStorage.setItem('username', registerForm.username)
                 .then(() => {
-                  dispatch({
-                    type: 'CHANGE_USER_NAME',
-                    payload: registerForm.username,
-                  });
+                  AsyncStorage.setItem(
+                    'interceptorsId',
+                    Axios.interceptors.request
+                      .use(requestHeader => {
+                        requestHeader.headers['LOG-IN-USER'] =
+                          registerForm.username;
+                        return requestHeader;
+                      })
+                      .toString(),
+                  )
+                    .then(
+                      dispatch({
+                        type: 'CHANGE_USER_NAME',
+                        payload: registerForm.username,
+                      }),
+                    )
+                    .catch(() => {
+                      console.log('Error Interceptor');
+                    });
                 })
                 .catch(err => {
                   console.log(err);
